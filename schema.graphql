@@ -1,0 +1,63 @@
+type User @entity {
+  id: ID!
+  liquidityPositions: [LiquidityPosition!] @derivedFrom(field: "user")
+}
+
+type LiquidityPosition @entity {
+  id: ID!
+  user: User!
+  poolAddress: Bytes!
+  balance: BigDecimal!
+  balanceFromMintBurn: BigDecimal!
+  poolProviderName: PoolProviderName!
+  poolProviderKey: PoolProviderKey!
+}
+
+type UserLiquidityPositionDayData @entity {
+  id: ID!
+  date: Int!
+  userAddress: Bytes!
+  poolAddress: Bytes!
+  balance: BigDecimal!
+  balanceFromMintBurn: BigDecimal!
+  poolProviderName: PoolProviderName!
+  poolProviderKey: PoolProviderKey!
+}
+
+type LPTransfer @entity {
+  id: ID!
+  userAddress: Bytes!
+  poolAddress: Bytes!
+  transactionHash: Bytes!
+  blockNumber: BigInt!
+  from: Bytes!
+  to: Bytes!
+  value: BigDecimal!
+  timestamp: BigInt!
+}
+
+type MintBurnLog @entity {
+  id: ID!
+  userAddress: Bytes!
+  poolAddress: Bytes!
+  transactionHash: Bytes!
+  blockNumber: BigInt!
+  value: BigDecimal!
+}
+
+type Exception @entity {
+  id: ID!
+  addrs: Bytes!
+  txHash: Bytes!
+  message: String!
+}
+
+enum PoolProviderName {
+  Spookyswap
+  Spirityswap
+}
+
+enum PoolProviderKey {
+  spookyswap_fantom
+  spiritswap_fantom
+}
