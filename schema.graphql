@@ -54,7 +54,7 @@ type Exception @entity {
 
 enum PoolProviderName {
   Spookyswap
-  Spirityswap
+  Spiritswap
 }
 
 enum PoolProviderKey {
