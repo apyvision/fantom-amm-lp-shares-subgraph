@@ -1,6 +1,6 @@
 import {
   Exception,
-  LiquidityPosition, LPTransfer, MintBurnLog,
+  LiquidityPosition, LPTransfer, MintBurnLog, UserLPTransaction,
   User,
   UserLiquidityPositionDayData
 } from "../generated/schema";
@@ -125,20 +125,44 @@ export function createMintBurnLog(event: ethereum.Event, userAddrs: Address, val
 }
 
 export function createTransferEvent(event: ethereum.Event, userAddrs: Address, from: Bytes, to: Bytes, value: BigInt): void {
-  let transactionHash = event.transaction.hash;
-  let txHash = transactionHash.toHexString()
-  let id = txHash
+  let blockNum = event.block.number.toString()
+  let id = blockNum
     .concat('-')
-    .concat(userAddrs.toHexString())
+    .concat(event.address.toHexString())
+    .concat('-')
+    .concat(from.toHexString())
+    .concat('-')
+    .concat(to.toHexString())
+    .concat('-')
+    .concat(value.toString())
 
   let transfer = new LPTransfer(id)
   transfer.userAddress = userAddrs
   transfer.poolAddress = event.address
-  transfer.transactionHash = transactionHash
+  transfer.transactionHash = event.transaction.hash
   transfer.blockNumber = event.block.number
   transfer.from = from
   transfer.to = to
   transfer.value = convertTokenToDecimal(value, BI_18)
   transfer.timestamp = event.block.timestamp
   transfer.save()
+}
+
+export function maybeCreateUserLpTransaction(event: ethereum.Event, userAddrs: Address, poolAddrs: Address): void {
+  let id = userAddrs.toHexString()
+    .concat('-')
+    .concat(poolAddrs.toHexString())
+    .concat('-')
+    .concat(event.block.number.toString())
+
+  if (UserLPTransaction.load(id) === null) {
+    let transfer = new UserLPTransaction(id)
+    transfer.userAddress = userAddrs
+    transfer.poolAddress = poolAddrs
+    transfer.transactionHash = event.transaction.hash
+    transfer.blockNumber = event.block.number
+    transfer.timestamp = event.block.timestamp
+    transfer.save()
+  }
+
 }

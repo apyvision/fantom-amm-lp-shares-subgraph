@@ -1,5 +1,5 @@
 specVersion: 0.0.3
-description: Liquidity Pool Balances for an Address
+description: Liquidity Pool Balances for an Address (Fantom)
 repository: https://github.com/apyvision/amm_lp_share_subgraph
 schema:
   file: schema.graphql
