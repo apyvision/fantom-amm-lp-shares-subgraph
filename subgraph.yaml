@@ -63,7 +63,7 @@ templates:
       file: ./src/spooky/mapping.ts
       entities:
         - User
-        - UserLiquidityPositionDayData
+        - UserLPTransaction
         - LiquidityPosition
       abis:
         - name: Pair
@@ -85,7 +85,7 @@ templates:
       file: ./src/spirit/mapping.ts
       entities:
         - User
-        - UserLiquidityPositionDayData
+        - UserLPTransaction
         - LiquidityPosition
       abis:
         - name: Pair

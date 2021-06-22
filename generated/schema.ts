@@ -61,6 +61,26 @@ export class User extends Entity {
       );
     }
   }
+
+  get userLPTransactions(): Array<string> | null {
+    let value = this.get("userLPTransactions");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set userLPTransactions(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("userLPTransactions");
+    } else {
+      this.set(
+        "userLPTransactions",
+        Value.fromStringArray(value as Array<string>)
+      );
+    }
+  }
 }
 
 export class LiquidityPosition extends Entity {
@@ -111,24 +131,6 @@ export class LiquidityPosition extends Entity {
     this.set("poolAddress", Value.fromBytes(value));
   }
 
-  get balance(): BigDecimal {
-    let value = this.get("balance");
-    return value.toBigDecimal();
-  }
-
-  set balance(value: BigDecimal) {
-    this.set("balance", Value.fromBigDecimal(value));
-  }
-
-  get balanceFromMintBurn(): BigDecimal {
-    let value = this.get("balanceFromMintBurn");
-    return value.toBigDecimal();
-  }
-
-  set balanceFromMintBurn(value: BigDecimal) {
-    this.set("balanceFromMintBurn", Value.fromBigDecimal(value));
-  }
-
   get poolProviderName(): string {
     let value = this.get("poolProviderName");
     return value.toString();
@@ -145,209 +147,6 @@ export class LiquidityPosition extends Entity {
 
   set poolProviderKey(value: string) {
     this.set("poolProviderKey", Value.fromString(value));
-  }
-}
-
-export class UserLiquidityPositionDayData extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(
-      id !== null,
-      "Cannot save UserLiquidityPositionDayData entity without an ID"
-    );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save UserLiquidityPositionDayData entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("UserLiquidityPositionDayData", id.toString(), this);
-  }
-
-  static load(id: string): UserLiquidityPositionDayData | null {
-    return store.get(
-      "UserLiquidityPositionDayData",
-      id
-    ) as UserLiquidityPositionDayData | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get date(): i32 {
-    let value = this.get("date");
-    return value.toI32();
-  }
-
-  set date(value: i32) {
-    this.set("date", Value.fromI32(value));
-  }
-
-  get userAddress(): Bytes {
-    let value = this.get("userAddress");
-    return value.toBytes();
-  }
-
-  set userAddress(value: Bytes) {
-    this.set("userAddress", Value.fromBytes(value));
-  }
-
-  get poolAddress(): Bytes {
-    let value = this.get("poolAddress");
-    return value.toBytes();
-  }
-
-  set poolAddress(value: Bytes) {
-    this.set("poolAddress", Value.fromBytes(value));
-  }
-
-  get balance(): BigDecimal {
-    let value = this.get("balance");
-    return value.toBigDecimal();
-  }
-
-  set balance(value: BigDecimal) {
-    this.set("balance", Value.fromBigDecimal(value));
-  }
-
-  get balanceFromMintBurn(): BigDecimal {
-    let value = this.get("balanceFromMintBurn");
-    return value.toBigDecimal();
-  }
-
-  set balanceFromMintBurn(value: BigDecimal) {
-    this.set("balanceFromMintBurn", Value.fromBigDecimal(value));
-  }
-
-  get poolProviderName(): string {
-    let value = this.get("poolProviderName");
-    return value.toString();
-  }
-
-  set poolProviderName(value: string) {
-    this.set("poolProviderName", Value.fromString(value));
-  }
-
-  get poolProviderKey(): string {
-    let value = this.get("poolProviderKey");
-    return value.toString();
-  }
-
-  set poolProviderKey(value: string) {
-    this.set("poolProviderKey", Value.fromString(value));
-  }
-}
-
-export class LPTransfer extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save LPTransfer entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save LPTransfer entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("LPTransfer", id.toString(), this);
-  }
-
-  static load(id: string): LPTransfer | null {
-    return store.get("LPTransfer", id) as LPTransfer | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get userAddress(): Bytes {
-    let value = this.get("userAddress");
-    return value.toBytes();
-  }
-
-  set userAddress(value: Bytes) {
-    this.set("userAddress", Value.fromBytes(value));
-  }
-
-  get poolAddress(): Bytes {
-    let value = this.get("poolAddress");
-    return value.toBytes();
-  }
-
-  set poolAddress(value: Bytes) {
-    this.set("poolAddress", Value.fromBytes(value));
-  }
-
-  get transactionHash(): Bytes {
-    let value = this.get("transactionHash");
-    return value.toBytes();
-  }
-
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
-  }
-
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
-    return value.toBigInt();
-  }
-
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
-  }
-
-  get from(): Bytes {
-    let value = this.get("from");
-    return value.toBytes();
-  }
-
-  set from(value: Bytes) {
-    this.set("from", Value.fromBytes(value));
-  }
-
-  get to(): Bytes {
-    let value = this.get("to");
-    return value.toBytes();
-  }
-
-  set to(value: Bytes) {
-    this.set("to", Value.fromBytes(value));
-  }
-
-  get value(): BigDecimal {
-    let value = this.get("value");
-    return value.toBigDecimal();
-  }
-
-  set value(value: BigDecimal) {
-    this.set("value", Value.fromBigDecimal(value));
-  }
-
-  get timestamp(): BigInt {
-    let value = this.get("timestamp");
-    return value.toBigInt();
-  }
-
-  set timestamp(value: BigInt) {
-    this.set("timestamp", Value.fromBigInt(value));
   }
 }
 
@@ -381,13 +180,13 @@ export class UserLPTransaction extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get userAddress(): Bytes {
-    let value = this.get("userAddress");
-    return value.toBytes();
+  get user(): string {
+    let value = this.get("user");
+    return value.toString();
   }
 
-  set userAddress(value: Bytes) {
-    this.set("userAddress", Value.fromBytes(value));
+  set user(value: string) {
+    this.set("user", Value.fromString(value));
   }
 
   get poolAddress(): Bytes {
@@ -424,82 +223,6 @@ export class UserLPTransaction extends Entity {
 
   set timestamp(value: BigInt) {
     this.set("timestamp", Value.fromBigInt(value));
-  }
-}
-
-export class MintBurnLog extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save MintBurnLog entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save MintBurnLog entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("MintBurnLog", id.toString(), this);
-  }
-
-  static load(id: string): MintBurnLog | null {
-    return store.get("MintBurnLog", id) as MintBurnLog | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get userAddress(): Bytes {
-    let value = this.get("userAddress");
-    return value.toBytes();
-  }
-
-  set userAddress(value: Bytes) {
-    this.set("userAddress", Value.fromBytes(value));
-  }
-
-  get poolAddress(): Bytes {
-    let value = this.get("poolAddress");
-    return value.toBytes();
-  }
-
-  set poolAddress(value: Bytes) {
-    this.set("poolAddress", Value.fromBytes(value));
-  }
-
-  get transactionHash(): Bytes {
-    let value = this.get("transactionHash");
-    return value.toBytes();
-  }
-
-  set transactionHash(value: Bytes) {
-    this.set("transactionHash", Value.fromBytes(value));
-  }
-
-  get blockNumber(): BigInt {
-    let value = this.get("blockNumber");
-    return value.toBigInt();
-  }
-
-  set blockNumber(value: BigInt) {
-    this.set("blockNumber", Value.fromBigInt(value));
-  }
-
-  get value(): BigDecimal {
-    let value = this.get("value");
-    return value.toBigDecimal();
-  }
-
-  set value(value: BigDecimal) {
-    this.set("value", Value.fromBigDecimal(value));
   }
 }
 
